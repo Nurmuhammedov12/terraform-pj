@@ -8,6 +8,7 @@ variable subnet_cidr_block {}
 variable availability_zone {}
 variable env_prefix {}
 variable my-ip {}
+variable instance_type {}
 
 resource "aws_vpc" "myapp-vpc" {
     cidr_block = var.vpc_cidr_block
@@ -90,11 +91,16 @@ output "aws_ami_id" {
     value = data.aws_ami.latest_amazon_linux.id
 }
 
-resource "aws_instance" "myapp-instance" {
+resource "aws_instance" "myapp-ins" {
     ami = data.aws_ami.latest_amazon_linux.id
-    instance_type = "t3.micro"
+    instance_type = var.instance_type
+
     subnet_id = aws_subnet.myapp-subnet.id
-    security_groups = [aws_security_group.myapp-sg.name]
+    vpc_security_group_ids = [aws_security_group.myapp-sg.id]   
+    availability_zone = var.availability_zone
+
+    associate_public_ip_address = true
+    key_name = "key-pair" # TODO: Replace with your actual key pair name
     tags = {
         Name: "${var.env_prefix}-instance"
     }
