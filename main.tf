@@ -75,3 +75,28 @@ resource "aws_security_group" "myapp-sg" {
             Name: "${var.env_prefix}-sg"
     }
 }
+
+data "aws_ami" "latest_amazon_linux" {
+    most_recent = true
+    owners = ["amazon"]
+    filter {
+        name = "name"
+        values = ["amzn2-ami-hvm-*-x86_64-gp2"]
+    }
+  
+}
+
+output "aws_ami_id" {
+    value = data.aws_ami.latest_amazon_linux.id
+}
+
+resource "aws_instance" "myapp-instance" {
+    ami = data.aws_ami.latest_amazon_linux.id
+    instance_type = "t3.micro"
+    subnet_id = aws_subnet.myapp-subnet.id
+    security_groups = [aws_security_group.myapp-sg.name]
+    tags = {
+        Name: "${var.env_prefix}-instance"
+    }
+  
+}
