@@ -91,6 +91,7 @@ output "aws_ami_id" {
     value = data.aws_ami.latest_amazon_linux.id
 }
 
+
 resource "aws_instance" "myapp-ins" {
     ami = data.aws_ami.latest_amazon_linux.id
     instance_type = var.instance_type
@@ -105,4 +106,8 @@ resource "aws_instance" "myapp-ins" {
         Name: "${var.env_prefix}-instance"
     }
   
+}
+
+output "ec2_public_ip" {
+    value = aws_instance.myapp-ins.public_ip
 }
