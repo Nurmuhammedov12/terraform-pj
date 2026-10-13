@@ -100,25 +100,25 @@ resource "aws_instance" "myapp-ins" {
     vpc_security_group_ids = [aws_security_group.myapp-sg.id]   
     availability_zone = var.availability_zone
 
-    associate_public_ip_address = true
-    key_name = "key-pair" # TODO: Replace with your actual key pair name
+    # associate_public_ip_address = true
+    # key_name = "key-pair" # TODO: Replace with your actual key pair name
 
-    connection {
-        type        = "ssh"
-        user        = "ec2-user"
-        private_key = file("~/.ssh/key-pair") # TODO: Replace 
-        host        = self.public_ip
-    }
-    provisioner "remote-exec" {
-        inline = [
-            "sudo yum update -y",
-            "sudo yum install -y httpd",
-            "sudo systemctl start httpd",
-            "sudo systemctl enable httpd",
-            "echo '<h1>Hello from Terraform!</h1>' | sudo tee /var/www/html/index.html"
-        ]
+    # connection {
+    #     type        = "ssh"
+    #     user        = "ec2-user"
+    #     private_key = file("~/.ssh/key-pair") # TODO: Replace 
+    #     host        = self.public_ip
+    # }
+    # provisioner "remote-exec" {
+    #     inline = [
+    #         "sudo yum update -y",
+    #         "sudo yum install -y httpd",
+    #         "sudo systemctl start httpd",
+    #         "sudo systemctl enable httpd",
+    #         "echo '<h1>Hello from Terraform!</h1>' | sudo tee /var/www/html/index.html"
+    #     ]
       
-    }
+    # }
 
     # provisioner "remote-exec" {
     #     script = "entry-script.sh" #execute the script on the remote instance
